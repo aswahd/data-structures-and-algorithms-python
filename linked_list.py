@@ -121,7 +121,7 @@ class DoublyLinkedList:
             return not (self == other)
 
         def element(self):
-            return self._node
+            return self._node._element
 
         def __repr__(self):
             return "Position(container, node)"
@@ -190,7 +190,7 @@ class DoublyLinkedList:
 
     def __iter__(self):
         """
-            Generate an iteration of the nodes of the list.
+            Generate an iteration of the elements of the list.
         """
         cursor = self.first()
         while cursor is not None:
@@ -218,7 +218,7 @@ class DoublyLinkedList:
         """
             Insert e at the end of the list, and return the position of that node.
         """
-        return self.insert_between(e, self._trailer, self._trailer._prev)
+        return self.insert_between(e, self._trailer._prev, self._trailer)
 
     def _delete_node(self, p):
         """
@@ -250,3 +250,14 @@ class DoublyLinkedList:
         if self.is_empty():
             raise ValueError("Empty List!")
         return self._delete_node(self._trailer._prev)
+
+
+dlist = DoublyLinkedList()
+dlist.insert_first(2)
+dlist.insert_last(3)
+dlist.insert_last(4)
+dlist.insert_last(5)
+dlist.insert_last(6)
+
+for el in dlist:
+    print(el)
