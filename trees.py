@@ -499,8 +499,9 @@ class GeneralTree(Tree):
             Generate an iteration of positions of children's of p.
         """
         node = self._validate(p)
-        for c in node._children:
-            yield self._make_position(c)
+        if self.num_children(p) > 0:
+            for c in node._children:
+                yield self._make_position(c)
 
     def replace(self, p, e):
         """
@@ -653,45 +654,5 @@ class GeneralTree(Tree):
         for p in self.preorder():
             yield p
 
-
-tree = GeneralTree()
-
-# Level 0
-root_pos = tree.add_root("Electronics R'Us")
-
-# Level 1
-tree.insert_first('R&D', root_pos)
-tree.insert_last('Sales', root_pos)
-tree.insert_last('Purchasing', root_pos)
-tree.insert_last('Manufacturing', root_pos)
-tree.insert_last('Sales', root_pos)
-
-# # Level 2
-# for i, p in enumerate(tree.children(root_pos)):
-#     if i == 1:
-#         tree.insert_first('Domestic', p)
-#         tree.insert_last('International', p)
-#
-#         for i_inter, pos_international in enumerate(tree.children(p)):
-#             if i_inter == 1:
-#                 tree.insert_first('Canada', pos_international)
-#                 tree.insert_last('S. America', pos_international)
-#                 tree.insert_last('Overseas', pos_international)
-#
-#         for i_overseas, pos_overseas in enumerate(tree.children(pos_international)):
-#             if i_overseas == 2:
-#                 tree.insert_first("Africa", pos_overseas)
-#                 tree.insert_last("Europe", pos_overseas)
-#                 tree.insert_last("Asia", pos_overseas)
-#                 tree.insert_last("Australia", pos_overseas)
-#
-#     if i == 3:
-#         tree.insert_first('TV', p)
-#         tree.insert_last('CD', p)
-#         tree.insert_last('Tuner', p)
-
-
-for child in tree.positions():
-    print(child.element())
 
 
