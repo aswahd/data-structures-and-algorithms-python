@@ -418,7 +418,7 @@ class GeneralTree(Tree):
     class _Node:
         __slots__ = "_element", "_parent", "_children"
 
-        def __init__(self, element, parent, children=DoublyLinkedList()):
+        def __init__(self, element, parent, children):
             self._element = element
             self._parent = parent
             self._children = children  # Doubly linked list
@@ -483,7 +483,7 @@ class GeneralTree(Tree):
             raise ValueError(" Tree is not empty! ")
 
         self._size += 1
-        self._root = self._Node(e, None)
+        self._root = self._Node(e, None, None)
 
         return self._make_position(self._root)
 
@@ -492,7 +492,7 @@ class GeneralTree(Tree):
             Return the number of children of position p.
         """
         node = self._validate(p)
-        return len(node._children)
+        return len(node._children) if node._children is not None else 0
 
     def children(self, p):
         """

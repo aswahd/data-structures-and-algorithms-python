@@ -251,13 +251,3 @@ class DoublyLinkedList:
             raise ValueError("Empty List!")
         return self._delete_node(self._trailer._prev)
 
-
-dlist = DoublyLinkedList()
-dlist.insert_first(2)
-dlist.insert_last(3)
-dlist.insert_last(4)
-dlist.insert_last(5)
-dlist.insert_last(6)
-
-for el in dlist:
-    print(el)
