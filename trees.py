@@ -537,10 +537,13 @@ class GeneralTree(Tree):
 
     def insert_first(self, e, p):
         """
-            Make e as the first child of the node at position p, and return the position of that child.
+            Make e as the first child of the node at position p.
         """
         node = self._validate(p)
-        node._children.insert_first(e)    # doubly linked list
+        new = self._Node(e, node, None)
+        if node._children is None:
+            node._children = DoublyLinkedList()
+        node._children.insert_first(new)    # doubly linked list
 
     def insert_last(self, e, p):
 
@@ -549,7 +552,10 @@ class GeneralTree(Tree):
         """
 
         node = self._validate(p)
-        node._children.insert_last(e)  # doubly linked list
+        new = self._Node(e, node, None)
+        if node._children is None:
+            node._children = DoublyLinkedList()
+        node._children.insert_last(new)  # doubly linked list
 
     def delete_first(self, p):
         """
