@@ -121,7 +121,7 @@ class LinkedBinary(BinaryTree):
             """
         returns True if other is a position representing the same location.
       """
-            return type(self) == type(other) and self.element() is other.element()
+            return type(self) == type(other) and self._node is other._node
 
     def _validate(self, p):
         """ Raise error if p is not a valid position otherwise return the node at position p. """
