@@ -1,3 +1,4 @@
+from distutils.command.build_scripts import first_line_re
 from linked_list import LinkedQueue, DoublyLinkedList
 
 
@@ -538,7 +539,7 @@ class GeneralTree(Tree):
 
     def insert_first(self, e, p):
         """
-            Make e as the first child of the node at position p.
+            Make e as the first child of the node at position p, and return the position of that child.
         """
         node = self._validate(p)
         new = self._Node(e, node, None)
@@ -549,7 +550,7 @@ class GeneralTree(Tree):
     def insert_last(self, e, p):
 
         """
-            Make e as the last child of the node at position p.
+            Make e as the last child of the node at position p, and return the position of that child.
         """
 
         node = self._validate(p)
@@ -557,6 +558,8 @@ class GeneralTree(Tree):
         if node._children is None:
             node._children = DoublyLinkedList()
         node._children.insert_last(new)  # doubly linked list
+
+        return self._make_position(new)
 
     def delete_first(self, p):
         """
@@ -654,5 +657,60 @@ class GeneralTree(Tree):
         for p in self.preorder():
             yield p
 
+    def _subtree_parenthetic(self, p):
+        """
+            Returns the parenthetic representation of a subtree at position p.
+        """
+        result = str(p.element())
+        if self.num_children(p) > 0:
+            first_time = True
+            for c in self.children(p):
+                result += ' (' if first_time else ', '
+                first_time = False
+                result += self._subtree_parenthetic(c)
+            return result + ')'   
+        
+        return result
+
+    def parenthetic(self):
+        """
+            Returns a parenthetic representation of a tree.
+        """
+
+        if not self.is_empty():
+            return self._subtree_parenthetic(self.root())
+        
+        return ""
+    
+    def load_parenthetic(self, repr):
+        """
+            Builds a tree from a parenthetic representation.
+        """
+
+        
 
 
+
+
+tree = GeneralTree()
+tree.add_root("Electronics R'Us")
+tree.insert_last("R & D", tree.root())
+sales = tree.insert_last("Sales", tree.root())
+tree.insert_last("Purchasing", tree.root())
+manufacturing = tree.insert_last("Manufacturing", tree.root())
+tree.insert_last("Domestic", sales)
+international = tree.insert_last("International", sales)
+tree.insert_last("TV", manufacturing)
+tree.insert_last("CD", manufacturing)
+tree.insert_last("Tuner", manufacturing)
+
+tree.insert_last("Canada", international)
+tree.insert_last("S. America", international)
+overseas = tree.insert_last("Overseas", international)
+tree.insert_last("Africa", overseas)
+tree.insert_last("Europe", overseas)
+tree.insert_last("Asia", overseas)
+tree.insert_last("Austalia", overseas)
+
+
+print(tree.parenthetic())
