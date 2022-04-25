@@ -250,4 +250,16 @@ class DoublyLinkedList:
         if self.is_empty():
             raise ValueError("Empty List!")
         return self._delete_node(self._trailer._prev)
+    def replace(self, p, e):
+        """
+        Replace the element at Position p with e.
+        Return the element formerly at Position p.
+        """
+        original = self.validate(p)
+        old_value = original._element
+        # temporarily store old element
+        original._element = e
+        # replace with new element
+        return old_value
+ 
 

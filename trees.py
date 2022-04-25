@@ -547,6 +547,8 @@ class GeneralTree(Tree):
             node._children = DoublyLinkedList()
         node._children.insert_first(new)    # doubly linked list
 
+        return self._make_position(new)
+
     def insert_last(self, e, p):
 
         """
@@ -672,6 +674,14 @@ class GeneralTree(Tree):
         
         return result
 
+    def set_element(self, e, p):
+        """
+            set the content of the node at position p to e.
+        """
+
+        node = self._validate(p)
+        node._element = e
+
     def parenthetic(self):
         """
             Returns a parenthetic representation of a tree.
@@ -682,35 +692,42 @@ class GeneralTree(Tree):
         
         return ""
     
-    def load_parenthetic(self, repr):
+    def parse_parenthetic(self, repr):
         """
             Builds a tree from a parenthetic representation.
         """
 
-        
+        # create a root node with empty content.
+        curr = self.add_root(None)
 
+        content = ''
+        for r in repr:
 
+            if r == '(':
+                # copy the content from token to the current node
+                self.set_element(content, curr)
+                # Create a first child and make it the current node
+                curr = self.insert_first(None, curr)
+                content = ''
+            elif r == ',':
+                self.set_element(content, curr)
+                # Create a sibling node
+                parent = self.parent(curr)
+                curr = self.insert_last(None, parent)
+                content = ''
+            elif r == ')':
+                self.set_element(content, curr)
+                # Go one level higher.
+                curr = self.parent(curr)
+                content = ''
+            else:
+                content += r
 
 
 tree = GeneralTree()
-tree.add_root("Electronics R'Us")
-tree.insert_last("R & D", tree.root())
-sales = tree.insert_last("Sales", tree.root())
-tree.insert_last("Purchasing", tree.root())
-manufacturing = tree.insert_last("Manufacturing", tree.root())
-tree.insert_last("Domestic", sales)
-international = tree.insert_last("International", sales)
-tree.insert_last("TV", manufacturing)
-tree.insert_last("CD", manufacturing)
-tree.insert_last("Tuner", manufacturing)
+tree.parse_parenthetic('A(B(C), D)')
 
-tree.insert_last("Canada", international)
-tree.insert_last("S. America", international)
-overseas = tree.insert_last("Overseas", international)
-tree.insert_last("Africa", overseas)
-tree.insert_last("Europe", overseas)
-tree.insert_last("Asia", overseas)
-tree.insert_last("Austalia", overseas)
+for p in tree.positions():
+    print(p.element())
 
 
-print(tree.parenthetic())
