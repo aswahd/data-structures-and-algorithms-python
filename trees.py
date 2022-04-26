@@ -656,7 +656,7 @@ class GeneralTree(Tree):
             Generate an iteration of all position in the tree.
         """
 
-        for p in self.postorder():
+        for p in self.preorder():
             yield p
 
     def _subtree_parenthetic(self, p):
@@ -731,9 +731,45 @@ tree = GeneralTree()
 with open('electronics.txt') as f:
     content = f.read()
 
-
 tree.parse_parenthetic(content)
 
-for p in tree.positions():
-    print(p.element())
+# for p in tree.positions():
+#     print(p.element())
+
+
+def preorder_indented(t, p, d):
+    """
+        Print the preorder traversal of a tree by indenting the elements.
+        t: tree data structure.
+        p: position of the subtree.
+        d: current depth.
+   
+    """
+    indent = 2 * d * ' ' + p.element()
+    print(indent)
+
+    for c in t.children(p):  #  children should give a preorder traversal
+        preorder_indented(t, c, d+1)
+
+# print_indented(tree, tree.root(), 0)
+
+def preorder_label(t, p, d, path):
+    """
+        Print the preorder traversal of a tree by adding labels to the elements.
+        t: tree data structure.
+        p: position of the subtree.
+        d: current depth.
+    """
+    label = '.'.join(str(j+1) for j in path)
+    print(2 * d * ' ', label + '.', p.element())
+    path.append(0)
+    for c in t.children(p):
+        preorder_label(t, c, d+1, path)
+        path[-1] += 1
+    path.pop()
+
+
+preorder_label(tree, tree.root(), 0, [0])
+
+
 
