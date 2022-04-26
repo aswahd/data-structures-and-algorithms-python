@@ -656,7 +656,7 @@ class GeneralTree(Tree):
             Generate an iteration of all position in the tree.
         """
 
-        for p in self.preorder():
+        for p in self.postorder():
             yield p
 
     def _subtree_parenthetic(self, p):
@@ -710,13 +710,15 @@ class GeneralTree(Tree):
                 curr = self.insert_first(None, curr)
                 content = ''
             elif r == ',':
-                self.set_element(content, curr)
+                if content:
+                    self.set_element(content, curr)
                 # Create a sibling node
                 parent = self.parent(curr)
                 curr = self.insert_last(None, parent)
                 content = ''
             elif r == ')':
-                self.set_element(content, curr)
+                if content:
+                    self.set_element(content, curr)
                 # Go one level higher.
                 curr = self.parent(curr)
                 content = ''
@@ -725,9 +727,13 @@ class GeneralTree(Tree):
 
 
 tree = GeneralTree()
-tree.parse_parenthetic('A(B(C), D)')
+
+with open('electronics.txt') as f:
+    content = f.read()
+
+
+tree.parse_parenthetic(content)
 
 for p in tree.positions():
     print(p.element())
-
 
